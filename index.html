@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TriTool - A Te Intelligens Asszisztensed</title>
+  <style>
+    :root {
+      --bg-main: #0f1113;
+      --bg-sidebar: #2ecc71;
+      --bg-card: #16191c;
+      --accent-green: #2ecc71;
+      --text-main: #f5f6f7;
+      --text-muted: #7a828c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      background-color: var(--bg-main); 
+      color: var(--text-main); 
+      height: 100vh; 
+      display: flex; 
+      overflow: hidden; 
+    }
+
+    /* BAL OLDALI MENÜSÁV (Ugyanott, ugyanúgy mint az appban) */
+    .sidebar { 
+      width: 280px; 
+      background-color: var(--bg-sidebar); 
+      display: flex; 
+      flex-direction: column; 
+      padding: 40px 20px; 
+    }
+    
+    .sidebar-header { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      margin-bottom: 40px; 
+      padding-left: 10px; 
+    }
+    
+    .app-icon { 
+      width: 32px; 
+      height: 32px; 
+      object-fit: contain;
+    }
+    
+    .logo-text { 
+      font-size: 24px; 
+      font-weight: 800; 
+      color: #0f1113; 
+      letter-spacing: -0.5px; 
+    }
+    
+    .nav-menu { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 10px; 
+    }
+    
+    .nav-item { 
+      background: none; 
+      border: none; 
+      text-align: left; 
+      padding: 14px 16px; 
+      font-size: 15px; 
+      font-weight: 600; 
+      color: #0f1113; 
+      cursor: pointer; 
+      border-radius: 8px; 
+      transition: all 0.2s ease; 
+    }
+    
+    .nav-item:hover { 
+      background-color: rgba(0, 0, 0, 0.07); 
+    }
+    
+    .nav-item.active { 
+      background-color: #0f1113; 
+      color: var(--accent-green); 
+    }
+
+    /* JOBB OLDALI TARTALOMTERÜLET */
+    .main-content { 
+      flex: 1; 
+      padding: 60px; 
+      overflow-y: auto; 
+      display: flex;
+      align-items: center;
+    }
+    
+    .content-section { 
+      display: none; 
+      width: 100%;
+      max-width: 800px;
+      animation: slideUp 0.3s ease forwards; 
+    }
+    
+    .content-section.active { 
+      display: block; 
+    }
+
+    /* SZÖVEG STÍLUSOK */
+    .section-title { 
+      font-size: 42px; 
+      font-weight: 800; 
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    
+    .highlight { 
+      color: var(--accent-green); 
+    }
+    
+    .hero-text {
+      font-size: 22px;
+      line-height: 1.6;
+      color: #e1e1e1;
+      margin-bottom: 30px;
+    }
+
+    .sub-hero-text {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    /* FUNKCIÓK BUBORÉKOK (Kártyák) */
+    .features-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .feature-card {
+      background-color: var(--bg-card);
+      border: 1px solid #22262b;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      color: #fff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: #b3b9c1;
+      line-height: 1.6;
+    }
+
+    /* LETÖLTŐ SZEKCIÓ & GOMB */
+    .download-box {
+      background: var(--bg-card);
+      border: 1px solid #22262b;
+      padding: 40px;
+      border-radius: 16px;
+      text-align: center;
+      margin-top: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .download-btn {
+      background-color: var(--accent-green);
+      color: #0f1113;
+      font-size: 20px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 16px 50px;
+      border-radius: 30px;
+      display: inline-block;
+      margin-top: 25px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(46, 204, 113, 0.5);
+    }
+
+    .version-info {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 15px;
+    }
+
+    @keyframes slideUp { 
+      from { opacity: 0; transform: translateY(15px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="logo.png" alt="Logo" class="app-icon">
+      <span class="logo-text">TriTool</span>
+    </div>
+    <nav class="nav-menu">
+      <button class="nav-item active" onclick="switchWebSection('home-section', this)">🏠 Főoldal</button>
+      <button class="nav-item" onclick="switchWebSection('features-section', this)">✨ Funkciók</button>
+      <button class="nav-item" onclick="switchWebSection('security-section', this)">🛡️ Biztonság</button>
+      <button class="nav-item" onclick="switchWebSection('download-section', this)">🚀 Letöltés</button>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    
+    <section id="home-section" class="content-section active">
+      <h1 class="section-title">Üdvözlünk, ez a <span class="highlight">TriTool</span>!</h1>
+      <p class="hero-text">
+        A <strong>TriTool</strong>-t azért terveztük, hogy könnyebben és egyszerűbben használd a számítógépedet.
+      </p>
+      <p class="sub-hero-text">A TriTool kicsi, gyors, nélkülözhetetlen!</p>
+    </section>
+
+    <section id="features-section" class="content-section">
+      <h1 class="section-title">Mit tud a <span class="highlight">TriTool</span>?</h1>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>🖥️ Aktív ablakok és RAM</h3>
+          <p>Egyszerűen meg tudod nézni a Memória terheltséget, és akár bezárhatod a fölöslegesen futó programokat, fájlokat vagy mappákat!</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>🔍 Fájl kereső</h3>
+          <p>Volt már olyan, hogy kerestél egy mappát vagy fájlt, de végül a Windows feneketlen fekete lyukában találtad magad? Mi pont ezért találtuk ki a Fájl keresőt. Egyszerűen elkezded begépelni a fájlod nevét, és bal kattintással már meg is nyithatod! Jobb kattintással pedig a kedvencek közé rakhatod!</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>📋 Másolati előzmények</h3>
+          <p>A másolati előzményekkel több dolgot is ki tudsz másolni egyszerre, melyek kényelmesen, dátumonként elrendezve jelennek meg neked.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="security-section" class="content-section">
+      <h1 class="section-title">Maximális <span class="highlight">Biztonság</span></h1>
+      <p class="hero-text" style="margin-bottom: 20px;">
+        Nálunk a kényelmesség és a biztonság a legfontosabb, ezért <strong>nincs, és nem lesz regisztrációs rész</strong>.
+      </p>
+      <div class="feature-card" style="border-left: 4px solid var(--accent-green);">
+        <p style="font-size: 16px; color: #fff;">
+          Az appot se arra terveztük, hogy lelopja a személyes dolgaidat. Úgyhogy <strong>100%-osan megbízható!</strong> Az adataid helyben, a saját gépeden maradnak.
+        </p>
+      </div>
+    </section>
+
+    <section id="download-section" class="content-section">
+      <h1 class="section-title">Próbáld ki <span class="highlight">Most</span>!</h1>
+      <p class="hero-text">Itt letöltheted és kipróbálhatod appunkat a kényelemért!</p>
+      
+      <div class="download-box">
+        <h3 style="margin-bottom: 10px;">TriTool Asztali Asszisztens Windowsra</h3>
+        <p style="color: var(--text-muted); font-size: 14px;">Kattints az alábbi gombra a telepítő letöltéséhez:</p>
+        
+        <a href="TriTool Setup 1.0.0.exe" class="download-btn" download>Letöltés</a>
+        
+        <span class="version-info">Verzió: v1.0.0 (Stabil) | Fájlméret: ~110 MB | Formátum: .exe</span>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function switchWebSection(sectionId, buttonElement) {
+      // Összes szekció elrejtése
+      document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+      // Összes gomb aktív státuszának törlése
+      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+      
+      // Kiválasztott szekció és gomb aktiválása
+      document.getElementById(sectionId).classList.add('active');
+      buttonElement.classList.add('active');
+    }
+  </script>
+</body>
+</html>
